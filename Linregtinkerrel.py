@@ -17,28 +17,23 @@ class LinearRegressionApp:
         self.data = None
         self.model = None
 
-        # ALAP KINÉZERT
         main = ttk.Frame(root, padding=20)
         main.grid(row=0, column=0, sticky="nsew")
 
         root.grid_rowconfigure(0, weight=1)
         root.grid_columnconfigure(0, weight=1)
 
-        #GOMBOK
-        ttk.Button(main, text="📂 Adatok betöltése (CSV)", command=self.load_csv).pack(fill="x", pady=5)
-        ttk.Button(main, text="📄 Új adatok generálása", command=self.generate_new_data).pack(fill="x", pady=5)
-        ttk.Button(main, text="🤖 Modell tanítása", command=self.train_model).pack(fill="x", pady=5)
-        ttk.Button(main, text="📈 Grafikon megjelenítése", command=self.show_plot).pack(fill="x", pady=5)
+        ttk.Button(main, text="Adatok betöltése (CSV)", command=self.load_csv).pack(fill="x", pady=5)
+        ttk.Button(main, text="Új adatok generálása", command=self.generate_new_data).pack(fill="x", pady=5)
+        ttk.Button(main, text="Modell tanítása", command=self.train_model).pack(fill="x", pady=5)
+        ttk.Button(main, text="Grafikon megjelenítése", command=self.show_plot).pack(fill="x", pady=5)
 
-        #Eredmény
         self.result_label = ttk.Label(main, text="Nincs adat", justify="center", font=("Arial", 11),anchor="center")
         self.result_label.pack(pady=15, fill="x")
 
-        #Alsó státusz
         self.status = ttk.Label(root, text="Készen áll.", anchor="center", bootstyle="secondary" )
         self.status.grid(row=1, column=0, sticky="ew")
 
-    #Adatok betöltése
     def load_csv(self):
         filepath = filedialog.askopenfilename(
             filetypes=[("CSV fájl", "*.csv"), ("Összes fájl", "*.*")]
@@ -49,13 +44,12 @@ class LinearRegressionApp:
                 if self.data.shape[1] < 2:
                     raise ValueError("Legalább 2 oszlop kell (X és Y).")
 
-                self.status.config(text="📁 CSV betöltve!", bootstyle="info")
+                self.status.config(text="CSV betöltve!", bootstyle="info")
                 self.result_label.config(text="CSV betöltve.", bootstyle="light")
 
             except Exception as e:
                 self.status.config(text=f"Hiba: {e}", bootstyle="danger")
 
-    #Új adat generáló
     def generate_new_data(self):
         try:
             NUM_POINTS = 50
@@ -71,16 +65,15 @@ class LinearRegressionApp:
 
             self.data = df
 
-            self.status.config(text="📄 Új adatok generálva (adatok.csv)", bootstyle="info")
+            self.status.config(text="Új adatok generálva (adatok.csv)", bootstyle="info")
             self.result_label.config(text="Új adatok generálva. Tanítsd meg a modellt!", bootstyle="light")
 
         except Exception as e:
             self.status.config(text=f"Hiba: {e}", bootstyle="danger")
 
-    #Modell tanítása
     def train_model(self):
         if self.data is None:
-            self.status.config(text="❗ Nincs adat!", bootstyle="danger")
+            self.status.config(text="Nincs adat!", bootstyle="danger")
             return
 
         try:
@@ -99,14 +92,13 @@ class LinearRegressionApp:
             intercept = self.model.intercept_
 
             text = (
-                f"✔ Modell betanítva!\n\n"
+                f"Modell betanítva!\n\n"
                 f"Meredekség: {slope:.4f}\n"
                 f"Metszéspont: {intercept:.4f}\n\n"
                 f"MSE: {mse:.4f}\n"
                 f"R² pontosság: {r2:.4f}"
             )
 
-            # Szín alapján megjeleníti mennyire jól vannak betanítva az adatok
             if r2 > 0.8:
                 color = "success"
             elif r2 > 0.5:
@@ -115,15 +107,14 @@ class LinearRegressionApp:
                 color = "danger"
 
             self.result_label.config(text=text, bootstyle=color)
-            self.status.config(text="🤖 Modell sikeresen betanítva!", bootstyle="success")
+            self.status.config(text="Modell sikeresen betanítva!", bootstyle="success")
 
         except Exception as e:
             self.status.config(text=f"Hiba: {e}", bootstyle="danger")
 
-    # Grafikon
     def show_plot(self):
         if self.model is None:
-            self.status.config(text="❗ Először tanítsd be a modellt!", bootstyle="danger")
+            self.status.config(text="Először tanítsd be a modellt!", bootstyle="danger")
             return
 
         X = self.data.iloc[:, 0].values
@@ -144,10 +135,8 @@ class LinearRegressionApp:
         plt.grid(True)
         plt.show()
 
-        self.status.config(text="📈 Grafikon megjelenítve.", bootstyle="info")
+        self.status.config(text="Grafikon megjelenítve.", bootstyle="info")
 
-
-#Program lefutása
 if __name__ == "__main__":
     app = ttk.Window(themename="darkly")
     LinearRegressionApp(app)
